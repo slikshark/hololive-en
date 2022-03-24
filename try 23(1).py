@@ -2,6 +2,8 @@ import pyglet
 from pyglet.window import FPSDisplay, key
 import pymunk
 from pymunk.pyglet_util import DrawOptions
+from pymunk.vec2d import Vec2d
+import random
 
 collections_types = {
     "ball":1,
@@ -13,7 +15,22 @@ collections_types = {
 class Ball(pymunk.Body):
     def __index__(self, space, position):
         super().__init__(1, pymunk.inf)
-        
+        self.position.x, position.y+18
+        shape = pymunk.Circle(self, 10)
+        shape.elasticity = 0.98
+        shape.collision_type = collections_types["ball"]
+        self.spc = space
+        self.on_paddle = True
+
+        self.joint = pymunk.GrooveJoint(space.static_body, self, (100,110), (1180,118), (0,0))
+
+        space.add(self, shape, self.joint)
+
+    def shoot(self):
+        self.on_paddle = False
+        self.spc.remove(self.joint)
+        direction = Vec2d(random.choice([(50,500), (-50,50)]))
+        self.apply_impulse_at_local_point(direction)
 
 
 
